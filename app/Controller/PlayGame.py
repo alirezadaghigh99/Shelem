@@ -4,6 +4,7 @@ import random
 from app.Controller.CardController import CardController
 from app.Model.User import User
 from app.Model.card import Card
+from app.View.view import View
 
 users = []
 cards = []
@@ -23,8 +24,24 @@ class PlayGame:
                     temp_cards.append(Card(number, type))
                     counter += 1
             users.append(User(temp_cards))
-        for i in CardController.get_instance().all_cards():
-            if i[2] == False:
-                print(i)
 
-
+    @staticmethod
+    def choose_hakem():
+        is_in_circle = [True, True, True, True]
+        hakem = -1
+        score = -1
+        number_in_circle = 4;
+        while number_in_circle != 1:
+            for i in range(4):
+                if is_in_circle[i]:
+                    View.entekhab_view(i)
+                    score_temp = input()
+                    if score_temp == 'pass':
+                        is_in_circle[i] = False
+                        number_in_circle -= 1
+                    else:
+                        # TODO check raise number
+                        score = int(score_temp)
+                        hakem = i
+        return score , hakem
+PlayGame.choose_hakem()
