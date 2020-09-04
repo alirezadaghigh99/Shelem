@@ -105,11 +105,26 @@ class PlayGame:
         command = int(input())
         cards_in_carpet = []
         cards_in_carpet.append(users[hakem].cards[command - 1])
+        final_choice_of_hokm = users[hakem].cards[command - 1].type
+        current_player = (hakem + 1) % 4
+        player_that_played = 1
+        while player_that_played < 4:
+            print("player number ", current_player, ": ")
+            command = int(input())
+            player_that_played += 1
+            cards_in_carpet.append(users[current_player].cards[command - 1])
+            current_player += 1
 
-        pass
-
-    def game_running(self):
-        pass
+    @staticmethod
+    def game_running(current_player):
+        player_that_played = 0
+        cards_in_carpet = []
+        while player_that_played < 4:
+            print("player number ", current_player, ": ")
+            command = int(input())
+            player_that_played += 1
+            cards_in_carpet.append(users[current_player].cards[command - 1])
+            current_player += 1
 
     @staticmethod
     def check_winner_of_hand(cards):
@@ -137,12 +152,11 @@ class PlayGame:
     def find_score_of_the_hand(cards):
         score = 5
         for card in cards:
-            if card.number%5 == 5:
+            if card.number % 5 == 5:
                 score += card.number
             if card.number == 1:
                 score += 10
         return score
-
 
 
 PlayGame.start_game()
