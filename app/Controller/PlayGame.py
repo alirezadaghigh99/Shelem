@@ -111,20 +111,43 @@ class PlayGame:
         while player_that_played < 4:
             print("player number ", current_player, ": ")
             command = int(input())
-            player_that_played += 1
-            cards_in_carpet.append(users[current_player].cards[command - 1])
-            current_player += 1
+            if PlayGame.check_right_card_to_put(cards_in_carpet[0].type, current_player,
+                                                users[current_player].cards[command - 1]):
+                player_that_played += 1
+                cards_in_carpet.append(users[current_player].cards[command - 1])
+                current_player += 1
+            else:
+                print("wrong card")
 
     @staticmethod
     def game_running(current_player):
         player_that_played = 0
         cards_in_carpet = []
         while player_that_played < 4:
-            print("player number ", current_player, ": ")
-            command = int(input())
-            player_that_played += 1
-            cards_in_carpet.append(users[current_player].cards[command - 1])
-            current_player += 1
+            if player_that_played == 0:
+                print("player number ", current_player, ": ")
+                command = int(input())
+                player_that_played += 1
+                cards_in_carpet.append(users[current_player].cards[command - 1])
+                current_player += 1
+            else:
+                print("player number ", current_player, ": ")
+                command = int(input())
+                if PlayGame.check_right_card_to_put(cards_in_carpet[0].type, current_player,
+                                                    users[current_player].cards[command - 1]):
+                    player_that_played += 1
+                    cards_in_carpet.append(users[current_player].cards[command - 1])
+                    current_player += 1
+                else:
+                    print("wrong card")
+
+    @staticmethod
+    def check_right_card_to_put(zamine, current_player, card_of_current_player):
+        if zamine != card_of_current_player.type:
+            for card in users[current_player].cards:
+                if card.type == zamine:
+                    return False
+        return True
 
     @staticmethod
     def check_winner_of_hand(cards):
