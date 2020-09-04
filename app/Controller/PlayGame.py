@@ -8,6 +8,7 @@ from app.View.view import View
 
 users = []
 cards = []
+final_choice_of_hokm = -1
 
 
 class PlayGame:
@@ -46,6 +47,7 @@ class PlayGame:
                         score = int(score_temp)
                         hakem = i
         return score, hakem
+
     @staticmethod
     def add_cards_and_remove_cards(hakem):
         temp_cards = users[hakem].cards
@@ -56,7 +58,7 @@ class PlayGame:
                 temp_cards.append(Card(i[1], i[0]))
         removes = []
         for card in temp_cards:
-            print(card.number , card.type, end=' ')
+            print(card.number, card.type, end=' ')
         while True:
             View.remove_cards(removes)
             command = input()
@@ -66,11 +68,11 @@ class PlayGame:
             if command == "submit" and len(removes) == 4:
                 print("ok")
                 break
-            if command.split().__len__()==1:
+            if command.split().__len__() == 1:
                 unselected = int(command)
-                removes.pop(unselected-1)
+                removes.pop(unselected - 1)
                 continue
-            if command.split().__len__() == 2 and len(removes)<4:
+            if command.split().__len__() == 2 and len(removes) < 4:
                 str_number, str_type = command.split()
                 number = int(str_number)
                 type = -1
@@ -88,12 +90,61 @@ class PlayGame:
                         break
                 continue
 
+    @staticmethod
+    def put_card_in_game(current):
+        cards_in_carpet = []
+        max_number = 0;
+        print("player number ", current, ": ", end='')
+        current_number, current_type = map(int, input().split())
+        max_number = current_number
+        cards_in_carpet.append([current_number, current_type])
 
+    def first_round(self):
+        hakem = 1
+        print("player number ", hakem, ": ")
+        command = int(input())
+        cards_in_carpet = []
+        cards_in_carpet.append(users[hakem].cards[command - 1])
 
+        pass
 
+    def game_running(self):
+        pass
+
+    @staticmethod
+    def check_winner_of_hand(cards):
+        zamine = cards[0].type
+        max_number = -1
+        winner_of_the_hand = hakem
+        current_player = hakem
+        player_that_played = 0
+        boresh = False
+        for card in cards:
+            if card.number > max_number and card.type == zamine and card.type != final_choice_of_hokm and not boresh:
+                winner_of_the_hand = current_player
+                max_number = card.number
+            if card.type == final_choice_of_hokm and not boresh:
+                boresh = True
+                winner_of_the_hand = current_player
+                max_number = card.number
+            if card.type == final_choice_of_hokm and boresh and card.number > max_number:
+                winner_of_the_hand = current_player
+                max_number = card.number
+            current_player = (current_player + 1) % 4
+        return winner_of_the_hand
+
+    @staticmethod
+    def find_score_of_the_hand(cards):
+        score = 5
+        for card in cards:
+            if card.number%5 == 5:
+                score += card.number
+            if card.number == 1:
+                score += 10
+        return score
 
 
 
 PlayGame.start_game()
-score , hakem = PlayGame.choose_hakem()
+score, hakem = PlayGame.choose_hakem()
 PlayGame.add_cards_and_remove_cards(hakem)
